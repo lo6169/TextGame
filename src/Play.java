@@ -1,0 +1,421 @@
+import java.util.Scanner;
+
+/**
+ * Lindsey Olson
+ * WMC @ RIT
+ * 2019
+ * Version 1.0 5.27.19
+ */
+
+public class Play
+{
+    /**
+     * Call the beginning() function
+     * so that the journey may begin.
+     * @param args
+     */
+    public static void main(String[] args)
+    {
+        beginning();
+    }
+
+    /**
+     * Begin the world, and show the traveller how
+     * their fates landed them here. Then, build
+     * their life and watch them travel.
+     */
+    public static void beginning()
+    {
+        String expl = "It began years ago - you came out here seeking refuge " +
+                "from the everyday monotonies of work and life. However, you " +
+                "lost your ways. \n Now, you live in this humble shack. What " +
+                "you choose to do with this life is yours, but be warned, " +
+                "life is fleeting, and a life in the woods is dangerous. " +
+                "Stray wisely, young one. I hope we shall meet again. ";
+
+
+        Scanner s = new Scanner(System.in);
+        System.out.println("Welcome, young traveller. \nWould you like to hear " +
+                "how your fate landed you here? (y/n)");
+        String ans = s.nextLine();
+        if (ans.equals("y") || ans.equals("Y"))
+        {
+            System.out.println(expl);
+            buildLife();
+        }
+        else if (ans.equals("n") || ans.equals("N"))
+        {
+            buildLife();
+        }
+        else
+        {
+            System.out.println("I'm sorry, young traveller. I did not understand your request.");
+            beginning();
+        }
+    }
+
+    /**
+     * Begin by creating a character and setting their
+     * name, then go to their homeChoices().
+     */
+    public static void buildLife()
+    {
+        Character ch = new Character();
+        ch.Character();
+        System.out.println("Welcome to your cabin, " + ch.getName());
+        System.out.println("You have begun with stats - would you like to see them? (y/n)");
+        Scanner s = new Scanner(System.in);
+        String ans = s.nextLine();
+        if (ans.equals("y") || ans.equals("Y"))
+        {
+            printStats(ch);
+        }
+        else if (!(ans.equals("n") || ans.equals("N")))
+        {
+            System.out.println("I am sorry, I do not understand your" +
+                    "answer.");
+            buildLife();
+        }
+        Home home = new Home();
+        Quarry quarry = new Quarry();
+        Woods woods = new Woods();
+        River river = new River();
+        Town town = new Town();
+        homeChoices(ch, home, quarry, woods, river, town);
+    }
+
+    /**
+     * Print the character's statistics.
+     * This will be the first time they are shown,
+     * where the skills are all randomly generated
+     * but the stamina begins at 100 and all
+     * of the materials at 0.
+     * @param ch
+     */
+    public static void printStats(Character ch)
+    {
+        System.out.println("Fire starting skill - " + ch.getFireSkill());
+        System.out.println("Wood cutter skill - " + ch.getWoodSkill());
+        System.out.println("Fishing skill - " + ch.getFishingSkill());
+        System.out.println("Building skill - " + ch.getBuildingSkill());
+
+        System.out.println("Your stamina begins at 100, your" +
+                " materials begin at 0. Good luck. ");
+    }
+
+    /**
+     * Set the choices for the character's home,
+     * create their woods, river, quarry, and town,
+     * and then see where they decide to go.
+     * They can go to different places depending on if
+     * they have unlocked the areas or not.
+     * They can also sleep, stoke the fire, or cook,
+     * as well as see inventory. And when they're
+     * done, they are able to exit the game if they
+     * so desire.
+     * @param ch
+     */
+    public static void homeChoices(Character ch, Home home, Quarry quarry, Woods woods, River river, Town town)
+    {
+        Scanner s = new Scanner(System.in);
+        System.out.println("What would you like to do, " + ch.getName() + "?");
+        System.out.println("Explore (e), sleep (b), stoke the fire (s), cook (c), or see inventory (i) (x to exit)");
+        String ans = s.nextLine();
+
+        //TODO add eat as an option (should make it option in the field?)
+        if (ans.equals("e"))
+        {
+            System.out.println("Where would you like to explore? ");
+            //System.out.println("Press w for woods");
+            String str = "Press w for woods";
+            if (river.isUnlocked())
+            {
+                str += ", r for river";
+                //System.out.print(", r for river");
+            }
+            if (quarry.isUnlocked())
+            {
+                str += ", q for quarry";
+                //System.out.print(", q for quarry");
+            }
+            if (town.isUnlocked())
+            {
+                str += ", t for town";
+                //System.out.print(", t for town");
+            }
+            System.out.println(str);
+            String exp = s.nextLine();
+
+            if (exp.equals("w"))
+            {
+                System.out.println("You have entered the woods, it is dark and eerie.");
+                exploreWoods(ch, river, quarry, town, home, woods);
+            }
+            else if (exp.equals("q"))
+            {
+                System.out.println("You have entered the quarry, every step you take echoes.");
+                exploreQuarry(ch, river, quarry, town);
+            }
+            else if (exp.equals("r"))
+            {
+                System.out.println("You have entered the river, the rushing waves spray chilly water.");
+                exploreRiver(ch, river, quarry, town, home, woods);
+            }
+            else if (exp.equals("t"))
+            {
+                System.out.println("You have entered the town, the bustling whispers feel aimed at the new stranger.");
+                exploreTown(ch, river, quarry, town);
+            }
+        }
+        else if (ans.equals("b"))
+        {
+            ch.setStamina(100-ch.getStamina());
+            System.out.println("You had a restful night's sleep, your stamina has replenished.");
+            homeChoices(ch, home, quarry, woods, river, town);
+        }
+        else if (ans.equals("s"))
+        {
+            if (ch.getWood() >= 1)
+            {
+                ch.setWood(-1);
+                ch.setStamina(-1);
+                System.out.println("You have successfully stoked the fire.");
+                homeChoices(ch, home, quarry, woods, river, town);
+            }
+            else
+            {
+                System.out.println("You have no wood - go gather some.");
+                homeChoices(ch, home, quarry, woods, river, town);
+            }
+
+        }
+        else if (ans.equals("c"))
+        {
+            if (ch.getRawFood() >= 1 && home.isFireGoing())
+            {
+                ch.setRawFood(-1);
+                ch.setFood(1);
+                ch.setStamina(-1);
+                System.out.println("Would you like to eat your cooked food? (y/n)");
+                String fo = s.nextLine();
+                if (fo.equals("y"))
+                {
+                    ch.setStamina(10);
+                    ch.setFood(-1);
+                    System.out.println("That was delicious, and it gave you +10 stamina!");
+                }
+            }
+            else if (ch.getRawFood() >= 1 && !home.isFireGoing())
+            {
+                System.out.println("You need to stoke the fire - would you like to?");
+                String answer = s.nextLine();
+                if (answer.equals("y"))
+                {
+                    if (ch.getWood() >= 1)
+                    {
+                        ch.setRawFood(-1);
+                        ch.setWood(-1);
+                        ch.setFood(1);
+                        ch.setStamina(-2);
+                    }
+                    else
+                    {
+                        System.out.println("You have no wood, go gather some.");
+                    }
+                }
+            }
+            else
+            {
+                System.out.println("You have no raw food, go gather some.");
+            }
+            homeChoices(ch, home, quarry, woods, river, town);
+        }
+        else if (ans.equals("i"))
+        {
+            System.out.println("Inventory: ");
+            System.out.println("Food: " + ch.getFood());
+            System.out.println("Stone: " + ch.getRock());
+            System.out.println("Wood: " + ch.getWood());
+            System.out.println("Stamina: " + ch.getStamina());
+
+            homeChoices(ch, home, quarry, woods, river, town);
+        }
+        else if (ans.equals("x"))
+        {
+            System.out.println("Goodbye.");
+            exit();
+        }
+
+    }
+
+    /**
+     * Have the character (ch) explore the woods.
+     * Along the way, the character has a chance
+     * to discover new places, as well as finding
+     * goods for their home. They can find the river,
+     * the quarry, and then the town in that order.
+     * In the woods, they can collect wood for their home.
+     * From the woods, they can only find the river.
+     * From the river, they'll be able to find the
+     * quarry, and from the quarry, they'll be able
+     * to find the town.
+     * @param ch
+     * @param river
+     * @param quarry
+     * @param town
+     */
+    public static void exploreWoods(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods)
+    {
+        //TODO ADD WOLVES
+        Scanner c = new Scanner(System.in);
+        System.out.println("What would you like to do, " + ch.getName() + "?"); //TODO make it print once?
+        System.out.println("w to wander, h for home, s for stats, x to exit.");
+        String str = c.nextLine();
+        if (str.equals("w"))
+        {
+            int findWood = (int)(Math.random() * 101);
+            if (findWood <= ch.getWoodSkill()) //TODO check if this works
+            {
+                Scanner s = new Scanner(System.in);
+                System.out.println("You found wood! Would you like to chop it? (y/n)");
+                String strw = s.nextLine();
+                if (strw.equals("y"))
+                {
+                    ch.setStamina(-2);
+                    ch.setWood(1);
+                    exploreWoods(ch, river, quarry, town, home, woods);
+                }
+                else
+                {
+                    exploreWoods(ch, river, quarry, town, home, woods);
+                }
+            }
+
+            int findNew = (int)(Math.random() * 101);
+            if (findNew <= 10)
+            {
+                if (!river.isUnlocked())
+                {
+                    Scanner sc = new Scanner(System.in);
+                    river.setUnlocked(true);
+                    System.out.println("You found the river! Would you like to explore? (y/n)");
+                    String scs = sc.nextLine();
+                    if (scs.equals("y"))
+                    {
+                        System.out.println("You have entered the river, the rushing waves spray chilly water.");
+                        exploreRiver(ch, river, quarry, town, home, woods);
+                    } //TODO add the else if "n"
+                }
+            }
+            exploreWoods(ch, river, quarry, town, home, woods);
+            //System.out.println("You have entered the river, the rushing waves spray chilly water.");
+        }
+        else if (str.equals("h"))
+        {
+            homeChoices(ch, home, quarry, woods, river, town);
+        }
+        else if (str.equals("s"))
+        {
+            System.out.println("Inventory: ");
+            System.out.println("Food: " + ch.getFood());
+            System.out.println("Stone: " + ch.getRock());
+            System.out.println("Wood: " + ch.getWood());
+            System.out.println("Stamina: " + ch.getStamina());
+        }
+        else if (str.equals("x"))
+        {
+            System.out.println("Goodbye");
+            exit();
+        }
+    }
+
+    public static void exploreRiver(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods)
+    {
+        // TODO ADD ALLIGATOR
+        Scanner c = new Scanner(System.in);
+        System.out.println("What would you like to do, " + ch.getName() + "?");
+        System.out.println("w to wander, h for home, s for stats, x to exit.");
+        String str = c.nextLine();
+        if (str.equals("w"))
+        {
+            int findFish = (int)(Math.random() * 101);
+            if (findFish <= ch.getFishingSkill())
+            {
+                Scanner s = new Scanner(System.in);
+                System.out.println("You found fish! Would you like to take it? (y/n)");
+                String strw = s.nextLine();
+                if (strw.equals("y"))
+                {
+                    ch.setStamina(-4);
+                    ch.setRawFood(1);
+                    exploreRiver(ch, river, quarry, town, home, woods);
+                }
+                else
+                {
+                    exploreRiver(ch, river, quarry, town, home, woods);
+                }
+            }
+
+            int findNew = (int)(Math.random() * 101);
+            if (findNew <= 5)
+            {
+                if (!quarry.isUnlocked())
+                {
+                    Scanner sc = new Scanner(System.in);
+                    quarry.setUnlocked(true);
+                    System.out.println("You found the quarry! Would you like to explore? (y/n)");
+                    String scs = sc.nextLine();
+                    if (scs.equals("y"))
+                    {
+                        exploreQuarry(ch, river, quarry, town);
+                    }
+                }
+            }
+            exploreRiver(ch, river, quarry, town, home, woods);
+            //System.out.println("You have entered the river, the rushing waves spray chilly water.");
+        }
+        else if (str.equals("h"))
+        {
+            homeChoices(ch, home, quarry, woods, river, town);
+        }
+        else if (str.equals("s"))
+        {
+            System.out.println("Inventory: ");
+            System.out.println("Food: " + ch.getFood());
+            System.out.println("Stone: " + ch.getRock());
+            System.out.println("Wood: " + ch.getWood());
+            System.out.println("Stamina: " + ch.getStamina());
+        }
+        else if (str.equals("x"))
+        {
+            System.out.println("Goodbye");
+            exit();
+        }
+    }
+
+    public static void exploreQuarry(Character ch, River river, Quarry quarry, Town town)
+    {
+
+        Scanner c = new Scanner(System.in);
+        System.out.println("What would you like to do, " + ch.getName() + "?");
+        //TODO finish
+
+    }
+
+
+    public static void exploreTown(Character ch, River river, Quarry quarry, Town town)
+    {
+
+        Scanner c = new Scanner(System.in);
+        System.out.println("What would you like to do, " + ch.getName() + "?");
+        //TODO finish
+
+    }
+
+    public static void exit()
+    {
+        System.exit(0);
+    }
+
+
+}
