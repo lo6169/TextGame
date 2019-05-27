@@ -100,6 +100,10 @@ public class Character
     public void setStamina(int x)
     {
         stamina += x;
+        if (stamina > 100)
+        {
+            stamina = 100;
+        }
         if (stamina <= 0)
         {
             System.out.println("You have died. Your game is over.");

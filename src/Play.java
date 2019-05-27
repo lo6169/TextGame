@@ -126,7 +126,7 @@ public class Play
         if (ans.equals("e"))
         {
             System.out.println("Where would you like to explore? ");
-            //System.out.println("Press w for woods");
+            home.setFireGoing(false);
             String str = "Press w for woods";
             if (river.isUnlocked())
             {
@@ -154,7 +154,7 @@ public class Play
             else if (exp.equals("q"))
             {
                 System.out.println("You have entered the quarry, every step you take echoes.");
-                exploreQuarry(ch, river, quarry, town);
+                exploreQuarry(ch, river, quarry, town, home, woods);
             }
             else if (exp.equals("r"))
             {
@@ -164,13 +164,15 @@ public class Play
             else if (exp.equals("t"))
             {
                 System.out.println("You have entered the town, the bustling whispers feel aimed at the new stranger.");
-                exploreTown(ch, river, quarry, town);
+                exploreTown(ch, river, quarry, town, home, woods);
             }
         }
         else if (ans.equals("b"))
         {
             ch.setStamina(100-ch.getStamina());
-            System.out.println("You had a restful night's sleep, your stamina has replenished.");
+            home.setFireGoing(false);
+            System.out.println("You had a restful night's sleep, your stamina has replenished. " +
+                            "However, your fire went out while you slept");
             homeChoices(ch, home, quarry, woods, river, town);
         }
         else if (ans.equals("s"))
@@ -180,6 +182,7 @@ public class Play
                 ch.setWood(-1);
                 ch.setStamina(-1);
                 System.out.println("You have successfully stoked the fire.");
+                home.setFireGoing(true);
                 homeChoices(ch, home, quarry, woods, river, town);
             }
             else
@@ -284,25 +287,23 @@ public class Play
         System.out.println("What would you like to do, " + ch.getName() + "?"); //TODO make it print once?
         System.out.println("w to wander, h for home, s for stats, x to exit.");
         String str = c.nextLine();
+
         if (str.equals("w"))
         {
             int findWood = (int)(Math.random() * 101);
+            int encounter = (int)(Math.random() * 101);
+            int findNew = (int)(Math.random() * 101);
+
             if (findWood <= ch.getWoodSkill())
             {
                 wood(ch);
                 exploreWoods(ch, river, quarry, town, home, woods);
             }
-            else
+            else if (encounter <= 15)
             {
-                int encounter = (int) (Math.random() * 101);
-                if (encounter <= 15)
-                {
-                    wolf(ch);
-                }
+                wolf(ch);
             }
-
-            int findNew = (int)(Math.random() * 101);
-            if (findNew <= 10)
+            else if (findNew <= 10)
             {
                 if (!river.isUnlocked())
                 {
@@ -447,33 +448,27 @@ public class Play
      */
     public static void exploreRiver(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods)
     {
-        // TODO ADD ALLIGATOR
         Scanner c = new Scanner(System.in);
-        System.out.println("What would you like to do, " + ch.getName() + "?");
+        System.out.println("What would you like to do, " + ch.getName() + "?"); //TODO make it print once?
         System.out.println("w to wander, h for home, s for stats, x to exit.");
         String str = c.nextLine();
+
         if (str.equals("w"))
         {
             int findFish = (int)(Math.random() * 101);
+            int encounter = (int)(Math.random() * 101);
+            int findNew = (int)(Math.random() * 101);
+
             if (findFish <= ch.getFishingSkill())
             {
-                Scanner s = new Scanner(System.in);
-                System.out.println("You found fish! Would you like to take it? (y/n)");
-                String strw = s.nextLine();
-                if (strw.equals("y"))
-                {
-                    ch.setStamina(-4);
-                    ch.setRawFood(1);
-                    exploreRiver(ch, river, quarry, town, home, woods);
-                }
-                else
-                {
-                    exploreRiver(ch, river, quarry, town, home, woods);
-                }
+                fish(ch);
+                exploreRiver(ch, river, quarry, town, home, woods);
             }
-
-            int findNew = (int)(Math.random() * 101);
-            if (findNew <= 5)
+            else if (encounter <= 15)
+            {
+                alligator(ch);
+            }
+            else if (findNew <= 10)
             {
                 if (!quarry.isUnlocked())
                 {
@@ -483,7 +478,8 @@ public class Play
                     String scs = sc.nextLine();
                     if (scs.equals("y") || scs.equals("Y"))
                     {
-                        exploreQuarry(ch, river, quarry, town);
+                        System.out.println("You have entered the quarry, every step you take echoes.");
+                        exploreQuarry(ch, river, quarry, town, home, woods);
                     }
                     else if (scs.equals("n") || scs.equals(("N")))
                     {
@@ -496,7 +492,6 @@ public class Play
                 }
             }
             exploreRiver(ch, river, quarry, town, home, woods);
-            //System.out.println("You have entered the river, the rushing waves spray chilly water.");
         }
         else if (str.equals("h"))
         {
@@ -505,6 +500,7 @@ public class Play
         else if (str.equals("s"))
         {
             printStats(ch);
+            exploreRiver(ch, river, quarry, town, home, woods);
         }
         else if (str.equals("x"))
         {
@@ -513,7 +509,98 @@ public class Play
         }
     }
 
-    public static void exploreQuarry(Character ch, River river, Quarry quarry, Town town)
+    /**
+     * Create the function that occurs when a
+     * character encounters an alligator in
+     * the river.
+     * @param ch the character
+     */
+    public static void alligator(Character ch)
+    {
+        System.out.println("An alligator has spotted you!");
+        System.out.println("Would you like to go to land (l), swim away (s), or fight (f)?");
+        Scanner scann = new Scanner(System.in);
+        String scn = scann.nextLine();
+        if (scn.equals("l"))
+        {
+            int land = (int)(Math.random() * 101);
+            System.out.println("You run to land, but will the alligator follow you?");
+            if (land <= 50)
+            {
+                System.out.println("The alligator sees you as too difficult, and swims away.");
+            }
+            else
+            {
+                System.out.println("The alligator follows you and grabs you by the leg.");
+                int damage = (int) (Math.random() * 51);
+                ch.setStamina(-damage);
+            }
+        }
+        else if (scn.equals("s"))
+        {
+            int run = (int) (Math.random() * 101);
+            System.out.println("You decide to swim away as fast as you can, but is it fast enough?");
+            if (run <= 25)
+            {
+                System.out.println("You swim quickly enough that the alligator does not follow.");
+            }
+            else
+            {
+                System.out.println("You swim fast, but not nearly fast enough, and the alligator catches you.");
+                int damage = (int) (Math.random() * 71);
+                ch.setStamina(-damage);
+            }
+        }
+        else if (scn.equals("f"))
+        {
+            int fight = (int) (Math.random() * 101);
+            System.out.println("You decide there's only one option - to fight. You straddle the alligator from the back.");
+            if (fight <= 75)
+            {
+                System.out.println("Success! You hold its gaping maw shut, and it cannot fight.");
+            }
+            else
+            {
+                System.out.println("Your bravery did you no good, as the alligator holds you under, drowning you.");
+                ch.setStamina(-ch.getStamina());
+            }
+        }
+        else
+        {
+            System.out.println("You did not enter a valid request, " +
+                    "you took too long to decide and the alligator attacks," +
+                    "taking away 50 stamina.");
+            ch.setStamina(-50);
+        }
+    }
+
+    /**
+     * The character encounters a fish in the
+     * river - will they catch it?
+     * @param ch
+     */
+    public static void fish(Character ch)
+    {
+        Scanner s = new Scanner(System.in);
+        System.out.println("You found a fish! Would you like to catch it? (y/n)");
+        String strw = s.nextLine();
+        if (strw.equals("y"))
+        {
+            ch.setStamina(-3);
+            ch.setRawFood(1);
+        }
+        else if (strw.equals("n"))
+        {
+
+        }
+        else
+        {
+            System.out.println("You did not enter a valid command, young one.");
+            fish(ch);
+        }
+    }
+
+    public static void exploreQuarry(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods)
     {
 
         Scanner c = new Scanner(System.in);
@@ -523,7 +610,7 @@ public class Play
     }
 
 
-    public static void exploreTown(Character ch, River river, Quarry quarry, Town town)
+    public static void exploreTown(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods)
     {
 
         Scanner c = new Scanner(System.in);
@@ -536,6 +623,4 @@ public class Play
     {
         System.exit(0);
     }
-
-
 }
