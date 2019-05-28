@@ -749,7 +749,7 @@ public class Play
     public static void rocks(Character ch)
     {
         Scanner s = new Scanner(System.in);
-        System.out.println("You found minerals! Would you like to mine tem? (y/n)");
+        System.out.println("You found minerals! Would you like to mine them? (y/n)");
         String strw = s.nextLine();
         if (strw.equals("y"))
         {
@@ -766,7 +766,6 @@ public class Play
             rocks(ch);
         }
     }
-
 
     public static void exploreTown(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods)
     {
