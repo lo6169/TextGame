@@ -26,6 +26,7 @@ public class Character
     int fireSkill;
     int woodSkill;
     int fishingSkill;
+    int miningSkill;
     int buildingSkill;
     int charisma;
     int wood;
@@ -50,6 +51,7 @@ public class Character
         woodSkill = (int)(Math.random() * 101);
         fishingSkill = (int)(Math.random() * 101);
         buildingSkill = (int)(Math.random() * 101);
+        miningSkill = (int)(Math.random() * 101);
         charisma = (int)(Math.random() * 101);
 
         wood = 0;
@@ -143,6 +145,16 @@ public class Character
 
     /**
      * This is a getter for the character's
+     * mining skill
+     * @return their mining skill
+     */
+    public int getMiningSkill()
+    {
+        return miningSkill;
+    }
+
+    /**
+     * This is a getter for the character's
      * charisma
      * @return their charisma
      */
@@ -204,6 +216,11 @@ public class Character
     public void setFood(int i)
     {
         food += i;
+        if (food < 0)
+        {
+            System.out.println("You have no food - go cook some.");
+            food = 0;
+        }
     }
 
     /**
@@ -217,6 +234,11 @@ public class Character
     public void setRawFood(int i)
     {
         rawFood += i;
+        if (rawFood < 0)
+        {
+            System.out.println("You have no fish - go gather some.");
+            rawFood = 0;
+        }
     }
 
     /**

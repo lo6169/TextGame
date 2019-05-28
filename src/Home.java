@@ -7,6 +7,8 @@
 
 public class Home
 {
+    int occupancy = 1;
+
     /**
      * This boolean, fireGoing,
      * is used to see if the person
@@ -44,6 +46,28 @@ public class Home
     public void setFireGoing(boolean boo)
     {
         fireGoing = boo;
+    }
+
+    /**
+     * Get the amount of occupants that
+     * the home can hold.
+     * @return that amount
+     */
+    public int getOccupancy()
+    {
+        return occupancy;
+    }
+
+    /**
+     * Set the occupancy to grow
+     * or decrease, depending
+     * on what chances are made.
+     * @param i the number by which
+     *          the occupancy changes.
+     */
+    public void setOccupancy(int i)
+    {
+        occupancy += i;
     }
 
 }

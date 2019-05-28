@@ -600,13 +600,171 @@ public class Play
         }
     }
 
+    /**
+     * Allow the user to explore the quarry and
+     * gather rocks and other materials.
+     * What will happen when the find the next place to
+     * explore? What will it be?
+     * @param ch
+     * @param river
+     * @param quarry
+     * @param town
+     * @param home
+     * @param woods
+     */
     public static void exploreQuarry(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods)
     {
-
         Scanner c = new Scanner(System.in);
-        System.out.println("What would you like to do, " + ch.getName() + "?");
-        //TODO finish
+        System.out.println("What would you like to do, " + ch.getName() + "?"); //TODO make it print once?
+        System.out.println("w to wander, h for home, s for stats, x to exit.");
+        String str = c.nextLine();
 
+        if (str.equals("w"))
+        {
+            int findRocks = (int)(Math.random() * 101);
+            int encounter = (int)(Math.random() * 101);
+            int findNew = (int)(Math.random() * 101);
+
+            if (findRocks <= ch.getMiningSkill())
+            {
+                rocks(ch);
+                exploreQuarry(ch, river, quarry, town, home, woods);
+            }
+            else if (encounter <= 10)
+            {
+                fallingRocks(ch);
+            }
+            else if (findNew <= 2)
+            {
+                if (!quarry.isUnlocked())
+                {
+                    Scanner sc = new Scanner(System.in);
+                    town.setUnlocked(true);
+                    System.out.println("You found a small town! Would you like to explore? (y/n)");
+                    String scs = sc.nextLine();
+                    if (scs.equals("y") || scs.equals("Y"))
+                    {
+                        System.out.println("You have entered the town, the bustling whispers feel aimed at the new stranger.");
+                        exploreTown(ch, river, quarry, town, home, woods);
+                    }
+                    else if (scs.equals("n") || scs.equals(("N")))
+                    {
+                        exploreQuarry(ch, river, quarry, town, home, woods);
+                    }
+                    else
+                    {
+                        System.out.println("I'm sorry young traveller, I do not understand your request.");
+                    }
+                }
+            }
+            exploreQuarry(ch, river, quarry, town, home, woods);
+        }
+        else if (str.equals("h"))
+        {
+            homeChoices(ch, home, quarry, woods, river, town);
+        }
+        else if (str.equals("s"))
+        {
+            printStats(ch);
+            exploreQuarry(ch, river, quarry, town, home, woods);
+        }
+        else if (str.equals("x"))
+        {
+            System.out.println("Goodbye");
+            exit();
+        }
+    }
+
+    /**
+     * What happens when the character encounters
+     * falling rocks? Will they dodge left,
+     * right, or stay exactly where they are?
+     * What will the fates offer them?
+     * @param ch
+     */
+    public static void fallingRocks(Character ch)
+    {
+        System.out.println("You hear a distant rumble, meaning only one thing - rocks are falling.");
+        System.out.println("Would you like to go to left (l), go right (r), or stay where you are (s)?");
+        Scanner scann = new Scanner(System.in);
+        String scn = scann.nextLine();
+        if (scn.equals("l"))
+        {
+            int left = (int)(Math.random() * 101);
+            System.out.println("You run to your left, but will it save you?");
+            if (left <= 35)
+            {
+                System.out.println("The boulder flies past you on your right - you're safe... for now");
+            }
+            else
+            {
+                System.out.println("The boulder comes down your path and pieces of debris hit you.");
+                int damage = (int) (Math.random() * 51);
+                ch.setStamina(-damage);
+            }
+        }
+        else if (scn.equals("r"))
+        {
+            int right = (int) (Math.random() * 101);
+            System.out.println("You decide to go to your right, but where will the boulder go?");
+            if (right <= 35)
+            {
+                System.out.println("As you dive to your right, boulder and debris fly to your left. You're safe.");
+            }
+            else
+            {
+                System.out.println("The boulder hurdles towards you, pieces of it hitting you.");
+                int damage = (int) (Math.random() * 51);
+                ch.setStamina(-damage);
+            }
+        }
+        else if (scn.equals("s"))
+        {
+            int stay = (int) (Math.random() * 101);
+            System.out.println("You judge that the rocks will go around you, so you stay in place.");
+            if (stay <= 75)
+            {
+                System.out.println("Your calculations were correct, the boulder avoids you.");
+            }
+            else
+            {
+                System.out.println("You're bad at math and the boulder hits you head on.");
+                ch.setStamina(-ch.getStamina());
+            }
+        }
+        else
+        {
+            System.out.println("You did not enter a valid request, " +
+                    "you took too long to decide and the alligator attacks," +
+                    "taking away 50 stamina.");
+            ch.setStamina(-50);
+        }
+    }
+
+    /**
+     * Have the character collect rocks
+     * once they come upon them.
+     * @param ch - the character
+     */
+    public static void rocks(Character ch)
+    {
+        Scanner s = new Scanner(System.in);
+        System.out.println("You found minerals! Would you like to mine tem? (y/n)");
+        String strw = s.nextLine();
+        if (strw.equals("y"))
+        {
+            ch.setStamina(-5);
+            ch.setRock(1);
+        }
+        else if (strw.equals("n"))
+        {
+
+        }
+        else
+        {
+            System.out.println("You did not enter a valid command, young one.");
+            rocks(ch);
+        }
     }
 
 
