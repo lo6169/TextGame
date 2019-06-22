@@ -767,12 +767,58 @@ public class Play
         }
     }
 
+    /**
+     * Explore the most difficult to find area, the town.
+     * Here, you will encounter all sorts of new things,
+     * such as trading, and people who you can talk to,
+     * and maybe eventually woo. Should you woo someone,
+     * you will need to visit the carpenter to build you a
+     * bigger house which will cost
+     *      100 wood
+     *      100 stone
+     *      50 food
+     * @param ch
+     * @param river
+     * @param quarry
+     * @param town
+     * @param home
+     * @param woods
+     */
     public static void exploreTown(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods)
     {
 
         Scanner c = new Scanner(System.in);
         System.out.println("What would you like to do, " + ch.getName() + "?");
         //TODO finish
+        System.out.println("w to wander, h for home, s for stats, x to exit.");
+        String str = c.nextLine();
+
+        if (str.equals("w"))
+        {
+            // Here we will be able to find the following:
+                // Shops (trading)
+                // People (wooing)
+                // Carpenter (should someone be wooed)
+            int findSeller = (int)(Math.random() * 101);
+            int findPerson = (int)(Math.random() * 101);
+            int findCarpenter = (int)(Math.random() * 101);
+
+
+        }
+        else if (str.equals("h"))
+        {
+            homeChoices(ch, home, quarry, woods, river, town);
+        }
+        else if (str.equals("s"))
+        {
+            printStats(ch);
+            exploreQuarry(ch, river, quarry, town, home, woods);
+        }
+        else if (str.equals("x"))
+        {
+            System.out.println("Goodbye");
+            exit();
+        }
 
     }
 

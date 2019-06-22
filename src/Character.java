@@ -33,6 +33,7 @@ public class Character
     int food;
     int rawFood;
     int rock;
+    boolean wooedPerson;
 
     /**
      * The constructor for the Character,
@@ -267,5 +268,26 @@ public class Character
         rock = rock + i;
     }
 
+    /**
+     * Set the boolean to see if the character
+     * has wooed a lover or not
+     * @param b - the truth value of
+     *          whether or not a person was wooed
+     */
+    public void setWooed(boolean b)
+    {
+        wooedPerson = b;
+    }
+
+    /**
+     * Check to see if a person has been wooed
+     * or not
+     * @return whether or not the character
+     *  has wooed anyone.
+     */
+    public boolean wooed()
+    {
+        return wooedPerson;
+    }
 
 }
