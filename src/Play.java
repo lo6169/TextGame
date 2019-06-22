@@ -4,7 +4,7 @@ import java.util.Scanner;
  * Lindsey Olson
  * WMC @ RIT
  * 2019
- * Version 1.0 5.27.19
+ * Version 1.0 6.21.19
  */
 
 public class Play
@@ -803,6 +803,12 @@ public class Play
             int findPerson = (int)(Math.random() * 101);
             int findCarpenter = (int)(Math.random() * 101);
 
+            if (findSeller >= 75)
+            {
+                Merchants merchant = new Merchants();
+                foundMerchant(ch, river, quarry, town, home, woods, merchant);
+            }
+
 
         }
         else if (str.equals("h"))
@@ -820,6 +826,31 @@ public class Play
             exit();
         }
 
+    }
+
+    public static void foundMerchant(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods, Merchants merchant)
+    {
+        Scanner s = new Scanner(System.in);
+        System.out.println("You found a merchant! Would you like to buy or sell? (y/n)");
+        String str1 = s.nextLine();
+        if (str1.equals("y") || str1.equals("Y"))
+        {
+            System.out.println(merchant.getName() + " " +
+                    "says hello.");
+            Scanner sc = new Scanner(System.in);
+            System.out.println("You inspect the merchant warily. Would you like to buy or sell? (b/s)");
+            //TODO this is where you left off, idiot
+        }
+        else if (str1.equals("n") || str1.equals("N"))
+        {
+            System.out.println("You eye the merchant down, and decide not to buy or sell." +
+                    " Instead, you leave, saying your appreciations under your breath.");
+        }
+        else
+        {
+            System.out.println("I'm sorry, I didn't understand your request.");
+            foundMerchant(ch, river, quarry, town, home, woods, merchant);
+        }
     }
 
     public static void exit()

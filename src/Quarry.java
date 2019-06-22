@@ -2,7 +2,7 @@
  * Lindsey Olson
  * WMC @ RIT
  * 2019
- * Version 1.0 5.27.19
+ * Version 1.0 6.21.19
  */
 
 public class Quarry
