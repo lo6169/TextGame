@@ -1,10 +1,11 @@
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 /**
  * Lindsey Olson
  * WMC @ RIT
  * 2019
- * Version 1.0 6.21.19
+ * Version 1.0 6.22.19
  */
 
 public class Play
@@ -115,7 +116,8 @@ public class Play
      * so desire.
      * @param ch
      */
-    public static void homeChoices(Character ch, Home home, Quarry quarry, Woods woods, River river, Town town)
+    public static void homeChoices(Character ch, Home home,
+                                   Quarry quarry, Woods woods, River river, Town town)
     {
         Scanner s = new Scanner(System.in);
         System.out.println("What would you like to do, " + ch.getName() + "?");
@@ -281,7 +283,8 @@ public class Play
      * @param quarry
      * @param town
      */
-    public static void exploreWoods(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods)
+    public static void exploreWoods(Character ch, River river,
+                                    Quarry quarry, Town town, Home home, Woods woods)
     {
         Scanner c = new Scanner(System.in);
         System.out.println("What would you like to do, " + ch.getName() + "?"); //TODO make it print once?
@@ -446,7 +449,8 @@ public class Play
      * @param home - the home
      * @param woods - the woods
      */
-    public static void exploreRiver(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods)
+    public static void exploreRiver(Character ch, River river,
+                                    Quarry quarry, Town town, Home home, Woods woods)
     {
         Scanner c = new Scanner(System.in);
         System.out.println("What would you like to do, " + ch.getName() + "?"); //TODO make it print once?
@@ -612,7 +616,8 @@ public class Play
      * @param home
      * @param woods
      */
-    public static void exploreQuarry(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods)
+    public static void exploreQuarry(Character ch, River river,
+                                     Quarry quarry, Town town, Home home, Woods woods)
     {
         Scanner c = new Scanner(System.in);
         System.out.println("What would you like to do, " + ch.getName() + "?"); //TODO make it print once?
@@ -784,7 +789,8 @@ public class Play
      * @param home
      * @param woods
      */
-    public static void exploreTown(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods)
+    public static void exploreTown(Character ch, River river,
+                                   Quarry quarry, Town town, Home home, Woods woods)
     {
 
         Scanner c = new Scanner(System.in);
@@ -828,7 +834,23 @@ public class Play
 
     }
 
-    public static void foundMerchant(Character ch, River river, Quarry quarry, Town town, Home home, Woods woods, Merchants merchant)
+    /**
+     * This is the function that will be called
+     * upon the discovery of a merchant. If a merchant
+     * is found, they will be given the option to barter with them,
+     * and then following that, if they say yes, they will
+     * be given an option to buy or sell. Then, they will have
+     * the opportunity to do so for a certain price.
+     * @param ch
+     * @param river
+     * @param quarry
+     * @param town
+     * @param home
+     * @param woods
+     * @param merchant
+     */
+    public static void foundMerchant(Character ch, River river, Quarry quarry,
+                                     Town town, Home home, Woods woods, Merchants merchant)
     {
         Scanner s = new Scanner(System.in);
         System.out.println("You found a merchant! Would you like to buy or sell? (y/n)");
@@ -838,7 +860,93 @@ public class Play
             System.out.println(merchant.getName() + " " +
                     "says hello.");
             Scanner sc = new Scanner(System.in);
-            System.out.println("You inspect the merchant warily. Would you like to buy or sell? (b/s)");
+            System.out.println("You inspect the merchant warily. Would you " +
+                    "like to buy or sell? (b/s)");
+            String str2 = sc.nextLine();
+            if (str2.equals("b") || str2.equals("B"))
+            {
+                Scanner sca = new Scanner(System.in);
+                System.out.println("You decide to buy something. Would you like to buy" +
+                        " rocks(r), raw food (f), cooked food (c), or wood(w)? (e to escape)");
+                String str3 = sca.nextLine();
+
+                if (str3.equals("r") || str3.equals("R"))
+                {
+                    System.out.println(merchant.getName() + "'s price for rocks is " +
+                            merchant.getGreedRock() + " items per rock.");
+                    System.out.println("What would you like to trade for that? wood(w), raw food (r)," +
+                            " cooked food (c)?");
+                    //TODO NOTES - ALSO MAKE IT SO THAT IT COMES BACK TO THE MERCHANT
+                    // AND THEY DON'T JUST DISAPPEAR SO CALL FOUNDMERCHANT AFTER UNLESS
+                    // THEY EXIT
+                }
+                else if (str3.equals("f") || str3.equals("F"))
+                {
+                    System.out.println(merchant.getName() + "'s price for raw food is " +
+                            merchant.getGreedFood() + " items per rock.");
+                    System.out.println("What would you like to trade for that? wood(w), rocks(r)?");
+                    //TODO
+                }
+                else if (str3.equals("c") || str3.equals("C"))
+                {
+                    System.out.println(merchant.getName() + "'s price for cooked food is " +
+                            merchant.getGreedFood() + " items per rock.");
+                    System.out.println("What would you like to trade for that? wood(w), rocks(r)?");
+                    //TODO
+                }
+                else if (str3.equals("w") || str3.equals("W"))
+                {
+                    System.out.println(merchant.getName() + "'s price for wood is " +
+                            merchant.getGreedWood() + " items per rock.");
+                    System.out.println("What would you like to trade for that? raw food(f), cooked food(c)" +
+                            ", rocks(r)?");
+                    //TODO
+                }
+                else if (str3.equals("e") || str3.equals("E"))
+                {
+                    System.out.println("The merchant thanks you for your time.");
+                }
+                else
+                {
+                    System.out.println("Deepest apologies, young one, " + merchant.getName() +
+                            " couldn't understand your request.");
+                    foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                }
+            }
+            else if (str2.equals("s") || str2.equals("S"))
+            {
+                Scanner sca = new Scanner(System.in);
+                System.out.println("You decide that you want to sell your goods. What would " +
+                        "you like to sell? rocks(r), raw food (f), cooked food (c), " +
+                        "or wood(w)? (e to escape)");
+                String str3 = sca.nextLine();
+
+                if (str3.equals("r") || str3.equals("R"))
+                {
+
+                }
+                else if (str3.equals("f") || str3.equals("F"))
+                {
+
+                }
+                else if (str3.equals("c") || str3.equals("C"))
+                {
+
+                }
+                else if (str3.equals("w") || str3.equals("W"))
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+            else
+            {
+
+            }
+
             //TODO this is where you left off, idiot
         }
         else if (str1.equals("n") || str1.equals("N"))
