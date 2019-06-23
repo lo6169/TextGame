@@ -5,7 +5,7 @@ import java.util.Scanner;
  * Lindsey Olson
  * WMC @ RIT
  * 2019
- * Version 1.0 6.22.19
+ * Version 1.0 6.23.19
  */
 
 public class Play
@@ -287,7 +287,7 @@ public class Play
                                     Quarry quarry, Town town, Home home, Woods woods)
     {
         Scanner c = new Scanner(System.in);
-        System.out.println("What would you like to do, " + ch.getName() + "?"); //TODO make it print once?
+        System.out.println("What would you like to do, " + ch.getName() + "?");
         System.out.println("w to wander, h for home, s for stats, x to exit.");
         String str = c.nextLine();
 
@@ -453,7 +453,7 @@ public class Play
                                     Quarry quarry, Town town, Home home, Woods woods)
     {
         Scanner c = new Scanner(System.in);
-        System.out.println("What would you like to do, " + ch.getName() + "?"); //TODO make it print once?
+        System.out.println("What would you like to do, " + ch.getName() + "?");
         System.out.println("w to wander, h for home, s for stats, x to exit.");
         String str = c.nextLine();
 
@@ -620,7 +620,7 @@ public class Play
                                      Quarry quarry, Town town, Home home, Woods woods)
     {
         Scanner c = new Scanner(System.in);
-        System.out.println("What would you like to do, " + ch.getName() + "?"); //TODO make it print once?
+        System.out.println("What would you like to do, " + ch.getName() + "?");
         System.out.println("w to wander, h for home, s for stats, x to exit.");
         String str = c.nextLine();
 
@@ -803,7 +803,9 @@ public class Play
         {
             // Here we will be able to find the following:
                 // Shops (trading)
+                // Merchants can be evil and steal stuff
                 // People (wooing)
+                // People can also be evil and be murderers
                 // Carpenter (should someone be wooed)
             int findSeller = (int)(Math.random() * 101);
             int findPerson = (int)(Math.random() * 101);
@@ -812,10 +814,16 @@ public class Play
             if (findSeller >= 75)
             {
                 Merchants merchant = new Merchants();
-                foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                if (merchant.getGoodness() >= 4)
+                {
+                    foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                }
+                else
+                {
+                    foundBadMerchant(ch, river, quarry, town, home, woods, merchant);
+                }
+
             }
-
-
         }
         else if (str.equals("h"))
         {
@@ -831,7 +839,6 @@ public class Play
             System.out.println("Goodbye");
             exit();
         }
-
     }
 
     /**
@@ -874,33 +881,119 @@ public class Play
                 {
                     System.out.println(merchant.getName() + "'s price for rocks is " +
                             merchant.getGreedRock() + " items per rock.");
+                    int price = merchant.getGreedRock();
+                    Scanner scan = new Scanner(System.in);
                     System.out.println("What would you like to trade for that? wood(w), raw food (r)," +
                             " cooked food (c)?");
-                    //TODO NOTES - ALSO MAKE IT SO THAT IT COMES BACK TO THE MERCHANT
-                    // AND THEY DON'T JUST DISAPPEAR SO CALL FOUNDMERCHANT AFTER UNLESS
-                    // THEY EXIT
+                    String stri = scan.nextLine();
+                    if (stri.equals("w") || stri.equals("W"))
+                    {
+                        ch.setWood((-1 * price));
+                        ch.setRock(1);
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else if (stri.equals("r") || stri.equals("R"))
+                    {
+                        ch.setRawFood((-1 * price));
+                        ch.setRock(1);
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else if (stri.equals("c") || stri.equals("C"))
+                    {
+                        ch.setFood((-1 * price));
+                        ch.setRock(1);
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else
+                    {
+                        System.out.println("I'm sorry, young one, I do not know what you mean.");
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
                 }
                 else if (str3.equals("f") || str3.equals("F"))
                 {
                     System.out.println(merchant.getName() + "'s price for raw food is " +
-                            merchant.getGreedFood() + " items per rock.");
+                            merchant.getGreedFood() + " items per raw fish.");
                     System.out.println("What would you like to trade for that? wood(w), rocks(r)?");
-                    //TODO
+                    int price = merchant.getGreedFood();
+                    Scanner scan = new Scanner(System.in);
+                    String stri = scan.nextLine();
+                    if (stri.equals("w") || stri.equals("W"))
+                    {
+                        ch.setWood((-1 * price));
+                        ch.setRawFood(1);
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else if (stri.equals("r") || stri.equals("R"))
+                    {
+                        ch.setRock((-1 * price));
+                        ch.setRawFood(1);
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else
+                    {
+                        System.out.println("I'm sorry, young one, I do not know what you mean.");
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
                 }
                 else if (str3.equals("c") || str3.equals("C"))
                 {
                     System.out.println(merchant.getName() + "'s price for cooked food is " +
-                            merchant.getGreedFood() + " items per rock.");
+                            merchant.getGreedFood() + " items per cooked fish.");
                     System.out.println("What would you like to trade for that? wood(w), rocks(r)?");
-                    //TODO
+                    int price = merchant.getGreedFood();
+                    Scanner scan = new Scanner(System.in);
+                    String stri = scan.nextLine();
+                    if (stri.equals("w") || stri.equals("W"))
+                    {
+                        ch.setWood((-1 * price));
+                        ch.setFood(1);
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else if (stri.equals("r") || stri.equals("R"))
+                    {
+                        ch.setRock((-1 * price));
+                        ch.setFood(1);
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else
+                    {
+                        System.out.println("I'm sorry, young one, I do not know what you mean.");
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
                 }
                 else if (str3.equals("w") || str3.equals("W"))
                 {
                     System.out.println(merchant.getName() + "'s price for wood is " +
-                            merchant.getGreedWood() + " items per rock.");
+                            merchant.getGreedWood() + " items per wood.");
                     System.out.println("What would you like to trade for that? raw food(f), cooked food(c)" +
                             ", rocks(r)?");
-                    //TODO
+                    int price = merchant.getGreedWood();
+                    Scanner scan = new Scanner(System.in);
+                    String stri = scan.nextLine();
+                    if (stri.equals("c") || stri.equals("C"))
+                    {
+                        ch.setFood((-1 * price));
+                        ch.setFood(1);
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else if (stri.equals("f") || stri.equals("F"))
+                    {
+                        ch.setRawFood((-1 * price));
+                        ch.setFood(1);
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else if (stri.equals("r") || stri.equals("R"))
+                    {
+                        ch.setRock((-1 * price));
+                        ch.setFood(1);
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else
+                    {
+                        System.out.println("I'm sorry, young one, I do not know what you mean.");
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
                 }
                 else if (str3.equals("e") || str3.equals("E"))
                 {
@@ -916,38 +1009,146 @@ public class Play
             else if (str2.equals("s") || str2.equals("S"))
             {
                 Scanner sca = new Scanner(System.in);
-                System.out.println("You decide that you want to sell your goods. What would " +
-                        "you like to sell? rocks(r), raw food (f), cooked food (c), " +
-                        "or wood(w)? (e to escape)");
+                System.out.println("You choose to sell your goods. What would you like" +
+                        " to sell?  rocks(r), raw food (f), cooked food (c), or wood(w)?" +
+                        " (e to escape)");
                 String str3 = sca.nextLine();
 
                 if (str3.equals("r") || str3.equals("R"))
                 {
-
+                    System.out.println("You choose to offer rocks. " + merchant.getName() + " will offer" +
+                            "you one item for " + merchant.getGreedRock() + " rocks.");
+                    int price = merchant.getGreedRock();
+                    Scanner scan = new Scanner(System.in);
+                    System.out.println("What would you like to trade for that? wood(w), raw food (r)," +
+                            " cooked food (c)?");
+                    String stri = scan.nextLine();
+                    if (stri.equals("w") || stri.equals("W"))
+                    {
+                        ch.setWood(1);
+                        ch.setRock((-1 * price));
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else if (stri.equals("r") || stri.equals("R"))
+                    {
+                        ch.setRawFood(1);
+                        ch.setRock((-1 * price));
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else if (stri.equals("c") || stri.equals("C"))
+                    {
+                        ch.setFood(1);
+                        ch.setRock((-1 * price));
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else
+                    {
+                        System.out.println("I'm sorry, young one, I do not know what you mean.");
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
                 }
                 else if (str3.equals("f") || str3.equals("F"))
                 {
-
+                    System.out.println("You choose to offer raw food. " + merchant.getName() + " will offer" +
+                            "you one item for " + merchant.getGreedFood() + " raw fish.");
+                    System.out.println("What would you like to trade for that? wood(w), rocks(r)?");
+                    int price = merchant.getGreedFood();
+                    Scanner scan = new Scanner(System.in);
+                    String stri = scan.nextLine();
+                    if (stri.equals("w") || stri.equals("W"))
+                    {
+                        ch.setWood(1);
+                        ch.setRawFood((-1 * price));
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else if (stri.equals("r") || stri.equals("R"))
+                    {
+                        ch.setRock(1);
+                        ch.setRawFood((-1 * price));
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else
+                    {
+                        System.out.println("I'm sorry, young one, I do not know what you mean.");
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
                 }
                 else if (str3.equals("c") || str3.equals("C"))
                 {
-
+                    System.out.println("You choose to offer cooked food. " + merchant.getName() + " will offer" +
+                            "you one item for " + merchant.getGreedFood() + " cooked fish.");
+                    System.out.println("What would you like to trade for that? wood(w), rocks(r)?");
+                    int price = merchant.getGreedFood();
+                    Scanner scan = new Scanner(System.in);
+                    String stri = scan.nextLine();
+                    if (stri.equals("w") || stri.equals("W"))
+                    {
+                        ch.setWood(1);
+                        ch.setFood((-1 * price));
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else if (stri.equals("r") || stri.equals("R"))
+                    {
+                        ch.setRock(1);
+                        ch.setFood((-1 * price));
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else
+                    {
+                        System.out.println("I'm sorry, young one, I do not know what you mean.");
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
                 }
                 else if (str3.equals("w") || str3.equals("W"))
                 {
-
+                    System.out.println(merchant.getName() + "'s price for wood is " +
+                            merchant.getGreedWood() + " items per wood.");
+                    System.out.println("What would you like to trade for that? raw food(f), cooked food(c)" +
+                            ", rocks(r)?");
+                    int price = merchant.getGreedWood();
+                    Scanner scan = new Scanner(System.in);
+                    String stri = scan.nextLine();
+                    if (stri.equals("c") || stri.equals("C"))
+                    {
+                        ch.setFood(1);
+                        ch.setFood((-1 * price));
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else if (stri.equals("f") || stri.equals("F"))
+                    {
+                        ch.setRawFood(1);
+                        ch.setFood((-1 * price));
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else if (stri.equals("r") || stri.equals("R"))
+                    {
+                        ch.setRock(1);
+                        ch.setFood((-1 * price));
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                    else
+                    {
+                        System.out.println("I'm sorry, young one, I do not know what you mean.");
+                        foundMerchant(ch, river, quarry, town, home, woods, merchant);
+                    }
+                }
+                else if (str3.equals("e") || str3.equals("E"))
+                {
+                    System.out.println("The merchant thanks you for your time.");
                 }
                 else
                 {
-
+                    System.out.println("Deepest apologies, young one, " + merchant.getName() +
+                            " couldn't understand your request.");
+                    foundMerchant(ch, river, quarry, town, home, woods, merchant);
                 }
             }
             else
             {
-
+                System.out.println("Deepest apologies, young one, " + merchant.getName() +
+                        " couldn't understand your request.");
+                foundMerchant(ch, river, quarry, town, home, woods, merchant);
             }
-
-            //TODO this is where you left off, idiot
         }
         else if (str1.equals("n") || str1.equals("N"))
         {
@@ -958,6 +1159,89 @@ public class Play
         {
             System.out.println("I'm sorry, I didn't understand your request.");
             foundMerchant(ch, river, quarry, town, home, woods, merchant);
+        }
+    }
+
+    /**
+     * If the unfortunate player happens
+     * to come across a merchant with
+     * a goodness level lower than 4,
+     * they may end up being robbed.
+     * They have an opportunity to fight
+     * back, however, they may face injury.
+     * @param ch
+     * @param river
+     * @param quarry
+     * @param town
+     * @param home
+     * @param woods
+     * @param merchant
+     */
+    public static void foundBadMerchant(Character ch, River river, Quarry quarry,
+                                        Town town, Home home, Woods woods, Merchants merchant)
+    {
+        System.out.println(merchant.getName() + " does not like the way you look, and tells you very" +
+                "carefully, ");
+        System.out.println("  \" Listen closely, I am going to take what I want. There is nothing you" +
+                "can do about it. \" ");
+        Scanner s = new Scanner(System.in);
+        System.out.println("Do you choose to give " + merchant.getName() + " your goods (g) or fight (f)?");
+        String st = s.nextLine();
+        if (st.equals("g") || st.equals("G"))
+        {
+            int whatGood = (int)(Math.random() * 5);
+            if (whatGood == 1)
+            {
+                int takeWood = (int) (Math.random() * ch.getWood());
+                ch.setWood(-takeWood);
+                System.out.println(merchant.getName() + " takes " + takeWood + " of your wood.");
+            }
+            else if (whatGood == 2)
+            {
+                int takeFish = (int) (Math.random() * ch.getFood());
+                ch.setWood(-takeFish);
+                System.out.println(merchant.getName() + " takes " + takeFish + " of your cooked fish.");
+            }
+            else if (whatGood == 3)
+            {
+                int takeFish = (int) (Math.random() * ch.getRawFood());
+                ch.setWood(-takeFish);
+                System.out.println(merchant.getName() + " takes " + takeFish + " of your raw fish.");
+            }
+            else if (whatGood == 4)
+            {
+                int takeRock = (int) (Math.random() * ch.getRock());
+                ch.setWood(-takeRock);
+                System.out.println(merchant.getName() + " takes " + takeRock + " of your rock.");
+            }
+            else
+            {
+                System.out.println("Upon further inspection, he decides to take it easy on you and lets you go.");
+            }
+        }
+        else if (st.equals("f") || st.equals("F"))
+        {
+            System.out.println("You refuse to give up your hard-earned goods and decide to fight back.");
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Your options are: run(r), punch the merchant(p), or knock their stuff down (k)");
+            String str = sc.nextLine();
+            if (str.equals("r") || str.equals("R"))
+            {
+                //TODO here is where you left off
+            }
+            else if (str.equals("p") || str.equals("P"))
+            {
+
+            }
+            else if (str.equals("k") || str.equals("K"))
+            {
+
+            }
+            else
+            {
+                System.out.println("You took too long to decide and the merchant hits you, taking away 50 stamina.");
+                ch.setStamina(-50);
+            }
         }
     }
 

@@ -20,6 +20,8 @@ public class NPC
     // These are the characteristics of an NPC
     String name;
     int charisma;
+    int goodness; // this will determine if a character is
+        // a murderer, a neutral person, or a potential lover
 
     /**
      * This is the constructor

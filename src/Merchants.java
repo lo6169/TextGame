@@ -29,7 +29,7 @@ public class Merchants
     int greedFood;
     int greedRock;
 
-    boolean good = true; //this will be changed sometimes
+    int goodness; //this will be changed sometimes
     // and will determine if the merchant will steal from the character
 
     /**
@@ -44,6 +44,8 @@ public class Merchants
         setGreedFood((int)(Math.random() * 10));
         setGreedRock((int)(Math.random() * 10));
         setGreedWood((int)(Math.random() * 10));
+
+        setGoodness((int)(Math.random() * 10));
     }
 
     /**
@@ -173,4 +175,27 @@ public class Merchants
     {
         greedRock = i;
     }
+
+    /**
+     * set the merchant's
+     * level of goodness or
+     * evil. If it's above a 5,
+     * they will do no harm.
+     */
+    public void setGoodness(int i)
+    {
+        goodness = i;
+    }
+
+    /**
+     * Get the merchant's goodness
+     * to determine whether or not
+     * they will do harm to the character
+     * @return
+     */
+    public int getGoodness()
+    {
+        return goodness;
+    }
+
 }
