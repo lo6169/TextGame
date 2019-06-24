@@ -4,7 +4,7 @@ import java.util.Random;
  * Lindsey Olson
  * WMC @ RIT
  * 2019
- * Version 1.0 6.22.19
+ * Version 1.0 6.24.19
  */
 
 public class NPC
@@ -20,6 +20,7 @@ public class NPC
     // These are the characteristics of an NPC
     String name;
     int charisma;
+
     int goodness; // this will determine if a character is
         // a murderer, a neutral person, or a potential lover
 
@@ -33,7 +34,7 @@ public class NPC
     {
         name = randomName();
         charisma = (int)(Math.random() * 101);
-
+        goodness = (int)(Math.random() * 11);
     }
 
     /**

@@ -4,7 +4,7 @@ import java.util.Random;
  * Lindsey Olson
  * WMC @ RIT
  * 2019
- * Version 1.0 6.22.19
+ * Version 1.0 6.24.19
  */
 
 public class Merchants
@@ -31,6 +31,8 @@ public class Merchants
 
     int goodness; //this will be changed sometimes
     // and will determine if the merchant will steal from the character
+
+    boolean merchantFound = false; // this will be set to true IFF a merchant has been found
 
     /**
      * The constructor for merchant,
@@ -196,6 +198,27 @@ public class Merchants
     public int getGoodness()
     {
         return goodness;
+    }
+
+    /**
+     * Check to see if this
+     * merchant has been found
+     * @return
+     */
+    public boolean isMerchantFound()
+    {
+        return merchantFound;
+    }
+
+    /**
+     * Set this to decide if
+     * the character has found a
+     * merchant or not.
+     * @param b
+     */
+    public void foundMerchant(boolean b)
+    {
+        merchantFound = b;
     }
 
 }

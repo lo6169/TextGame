@@ -5,7 +5,7 @@ import java.util.Scanner;
  * Lindsey Olson
  * WMC @ RIT
  * 2019
- * Version 1.0 6.23.19
+ * Version 1.0 6.24.19
  */
 
 public class Play
@@ -641,7 +641,7 @@ public class Play
             }
             else if (findNew <= 2)
             {
-                if (!quarry.isUnlocked())
+                if (!town.isUnlocked())
                 {
                     Scanner sc = new Scanner(System.in);
                     town.setUnlocked(true);
@@ -822,7 +822,11 @@ public class Play
                 {
                     foundBadMerchant(ch, river, quarry, town, home, woods, merchant);
                 }
-
+            }
+            //else if
+            else
+            {
+                exploreTown(ch, river, quarry, town, home, woods);
             }
         }
         else if (str.equals("h"))
@@ -832,7 +836,7 @@ public class Play
         else if (str.equals("s"))
         {
             printStats(ch);
-            exploreQuarry(ch, river, quarry, town, home, woods);
+            exploreTown(ch, river, quarry, town, home, woods);
         }
         else if (str.equals("x"))
         {
@@ -1225,17 +1229,45 @@ public class Play
             Scanner sc = new Scanner(System.in);
             System.out.println("Your options are: run(r), punch the merchant(p), or knock their stuff down (k)");
             String str = sc.nextLine();
+            int number = (int) (Math.random() * 101);
             if (str.equals("r") || str.equals("R"))
             {
-                //TODO here is where you left off
+                System.out.println("You decide to run as fast as you can out of the merchant's shop.");
+                if (number >= 45)
+                {
+                    System.out.println("You have successfully escaped the merchant!");
+                }
+                else
+                {
+                    System.out.println(merchant.getName() + " runs after you and tackles you, resulting in you taking damage.");
+                    ch.setStamina(-1 * (int)(Math.random() * 75));
+                }
             }
             else if (str.equals("p") || str.equals("P"))
             {
-
+                System.out.println("You refuse to take this sitting, so you hit " + merchant.getName());
+                if (number >= 35)
+                {
+                    System.out.println("You have successfully knocked out the merchant, escaping with only sore knuckles.");
+                }
+                else
+                {
+                    System.out.println("You underestimated your abilities, leaving your face exposed.");
+                    ch.setStamina(-1 * (int)(Math.random() * 101));
+                }
             }
             else if (str.equals("k") || str.equals("K"))
             {
-
+                System.out.println("You want to make a show, so you swipe everything off the merchants desk then run.");
+                if (number >= 80)
+                {
+                    System.out.println("That worked... somehow");
+                }
+                else
+                {
+                    System.out.println("What made you think that would work? The merchant pushes you into the wall.");
+                    ch.setStamina(-1 * (int)(Math.random() * 50));
+                }
             }
             else
             {
