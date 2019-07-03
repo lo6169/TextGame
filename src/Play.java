@@ -10,6 +10,16 @@ import java.util.Scanner;
 
 public class Play
 {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+
     /**
      * Call the beginning() function
      * so that the journey may begin.
@@ -27,6 +37,7 @@ public class Play
      */
     public static void beginning()
     {
+        System.out.println(ANSI_BLUE);
         String expl = "It began years ago - you came out here seeking refuge " +
                 "from the everyday monotonies of work and life. However, you " +
                 "lost your ways. \n Now, you live in this humble shack. What " +
@@ -50,7 +61,7 @@ public class Play
         }
         else
         {
-            System.out.println("I'm sorry, young traveller. I did not understand your request.");
+            System.out.println("I'm sorry, young traveller. I did not understand your request." + ANSI_RESET);
             beginning();
         }
     }
@@ -61,6 +72,7 @@ public class Play
      */
     public static void buildLife()
     {
+        System.out.println(ANSI_BLUE);
         Character ch = new Character();
         ch.Character();
         System.out.println("Welcome to your cabin, " + ch.getName());
@@ -77,6 +89,7 @@ public class Play
                     "answer.");
             buildLife();
         }
+        System.out.println(ANSI_RESET);
         Home home = new Home();
         Quarry quarry = new Quarry();
         Woods woods = new Woods();
@@ -95,13 +108,13 @@ public class Play
      */
     public static void printInitStats(Character ch)
     {
-        System.out.println("Fire starting skill - " + ch.getFireSkill());
+        System.out.println(ANSI_BLUE + "Fire starting skill - " + ch.getFireSkill());
         System.out.println("Wood cutter skill - " + ch.getWoodSkill());
         System.out.println("Fishing skill - " + ch.getFishingSkill());
         System.out.println("Building skill - " + ch.getBuildingSkill());
 
         System.out.println("Your stamina begins at 100, your" +
-                " materials begin at 0. Good luck. ");
+                " materials begin at 0. Good luck. " + ANSI_RESET);
     }
 
     /**
@@ -120,29 +133,29 @@ public class Play
                                    Quarry quarry, Woods woods, River river, Town town)
     {
         Scanner s = new Scanner(System.in);
-        System.out.println("What would you like to do, " + ch.getName() + "?");
-        System.out.println("Explore (e), sleep (b), stoke the fire (s), cook (c), or see inventory (i) (x to exit)");
+        System.out.println(ANSI_BLUE + "What would you like to do, " + ch.getName() + "?");
+        System.out.println("Explore (e), sleep (b), stoke the fire (s), cook (c), or see inventory (i) (x to exit)" + ANSI_RESET);
         String ans = s.nextLine();
 
         //TODO add eat as an option (should make it option in the field?)
         if (ans.equals("e"))
         {
-            System.out.println("Where would you like to explore? ");
+            System.out.println(ANSI_BLUE + "Where would you like to explore? ");
             home.setFireGoing(false);
-            String str = "Press w for woods";
+            String str = ANSI_GREEN + "Press w for woods";
             if (river.isUnlocked())
             {
-                str += ", r for river";
+                str += ", " + ANSI_CYAN + "r for river";
                 //System.out.print(", r for river");
             }
             if (quarry.isUnlocked())
             {
-                str += ", q for quarry";
+                str += ", " + ANSI_WHITE + "q for quarry";
                 //System.out.print(", q for quarry");
             }
             if (town.isUnlocked())
             {
-                str += ", t for town";
+                str += ", " + ANSI_PURPLE + "t for town";
                 //System.out.print(", t for town");
             }
             System.out.println(str);
@@ -150,22 +163,22 @@ public class Play
 
             if (exp.equals("w"))
             {
-                System.out.println("You have entered the woods, it is dark and eerie.");
+                System.out.println(ANSI_GREEN + "You have entered the woods, it is dark and eerie.");
                 exploreWoods(ch, river, quarry, town, home, woods);
             }
             else if (exp.equals("q"))
             {
-                System.out.println("You have entered the quarry, every step you take echoes.");
+                System.out.println(ANSI_WHITE + "You have entered the quarry, every step you take echoes.");
                 exploreQuarry(ch, river, quarry, town, home, woods);
             }
             else if (exp.equals("r"))
             {
-                System.out.println("You have entered the river, the rushing waves spray chilly water.");
+                System.out.println(ANSI_CYAN + "You have entered the river, the rushing waves spray chilly water.");
                 exploreRiver(ch, river, quarry, town, home, woods);
             }
             else if (exp.equals("t"))
             {
-                System.out.println("You have entered the town, the bustling whispers feel aimed at the new stranger.");
+                System.out.println(ANSI_PURPLE + "You have entered the town, the bustling whispers feel aimed at the new stranger.");
                 exploreTown(ch, river, quarry, town, home, woods);
             }
         }
@@ -173,7 +186,7 @@ public class Play
         {
             ch.setStamina(100-ch.getStamina());
             home.setFireGoing(false);
-            System.out.println("You had a restful night's sleep, your stamina has replenished. " +
+            System.out.println(ANSI_BLUE + "You had a restful night's sleep, your stamina has replenished. " +
                             "However, your fire went out while you slept");
             homeChoices(ch, home, quarry, woods, river, town);
         }
@@ -183,13 +196,13 @@ public class Play
             {
                 ch.setWood(-1);
                 ch.setStamina(-1);
-                System.out.println("You have successfully stoked the fire.");
+                System.out.println(ANSI_BLUE + "You have successfully stoked the fire.");
                 home.setFireGoing(true);
                 homeChoices(ch, home, quarry, woods, river, town);
             }
             else
             {
-                System.out.println("You have no wood - go gather some.");
+                System.out.println(ANSI_BLUE + "You have no wood - go gather some.");
                 homeChoices(ch, home, quarry, woods, river, town);
             }
 
@@ -201,18 +214,18 @@ public class Play
                 ch.setRawFood(-1);
                 ch.setFood(1);
                 ch.setStamina(-1);
-                System.out.println("Would you like to eat your cooked food? (y/n)");
+                System.out.println(ANSI_BLUE + "Would you like to eat your cooked food? (y/n)");
                 String fo = s.nextLine();
                 if (fo.equals("y"))
                 {
                     ch.setStamina(10);
                     ch.setFood(-1);
-                    System.out.println("That was delicious, and it gave you +10 stamina!");
+                    System.out.println(ANSI_BLUE + "That was delicious, and it gave you +10 stamina!");
                 }
             }
             else if (ch.getRawFood() >= 1 && !home.isFireGoing())
             {
-                System.out.println("You need to stoke the fire - would you like to?");
+                System.out.println(ANSI_BLUE + "You need to stoke the fire - would you like to?");
                 String answer = s.nextLine();
                 if (answer.equals("y"))
                 {
@@ -225,31 +238,35 @@ public class Play
                     }
                     else
                     {
-                        System.out.println("You have no wood, go gather some.");
+                        System.out.println(ANSI_BLUE + "You have no wood, go gather some.");
                     }
                 }
             }
             else
             {
-                System.out.println("You have no raw food, go gather some.");
+                System.out.println(ANSI_BLUE + "You have no raw food, go gather some.");
             }
             homeChoices(ch, home, quarry, woods, river, town);
         }
         else if (ans.equals("i"))
         {
-            System.out.println("Inventory: ");
+            System.out.println(ANSI_BLUE + "Inventory: ");
             System.out.println("Food: " + ch.getFood());
             System.out.println("Stone: " + ch.getRock());
             System.out.println("Wood: " + ch.getWood());
-            System.out.println("Stamina: " + ch.getStamina());
+            System.out.println("Stamina: " + ch.getStamina() + ANSI_RESET);
 
             homeChoices(ch, home, quarry, woods, river, town);
         }
         else if (ans.equals("x"))
         {
-            System.out.println("Goodbye.");
             exit();
         }
+        else
+        {
+            homeChoices(ch, home, quarry, woods, river, town);
+        }
+        System.out.println(ANSI_RESET);
     }
 
     /**
@@ -260,11 +277,11 @@ public class Play
      */
     public static void printStats(Character ch)
     {
-        System.out.println("Inventory: ");
+        System.out.println(ANSI_BLUE + "Inventory: ");
         System.out.println("Food: " + ch.getFood());
         System.out.println("Stone: " + ch.getRock());
         System.out.println("Wood: " + ch.getWood());
-        System.out.println("Stamina: " + ch.getStamina());
+        System.out.println("Stamina: " + ch.getStamina() + ANSI_RESET);
     }
 
     /**
@@ -287,7 +304,7 @@ public class Play
                                     Quarry quarry, Town town, Home home, Woods woods)
     {
         Scanner c = new Scanner(System.in);
-        System.out.println("What would you like to do, " + ch.getName() + "?");
+        System.out.println(ANSI_GREEN + "What would you like to do, " + ch.getName() + "?");
         System.out.println("w to wander, h for home, s for stats, x to exit.");
         String str = c.nextLine();
 
@@ -350,6 +367,7 @@ public class Play
             System.out.println("I'm sorry, " + ch.getName() + " I couldn't understand you");
             exploreWoods(ch, river, quarry, town, home, woods);
         }
+        System.out.println(ANSI_RESET);
     }
 
     /**
@@ -358,7 +376,7 @@ public class Play
      */
     public static void wolf(Character ch)
     {
-        System.out.println("You have encountered a wolf!");
+        System.out.println(ANSI_RED + "You have encountered a wolf!");
         System.out.println("Would you like to hide (h), run (r), or fight (f)?");
         Scanner scann = new Scanner(System.in);
         String scn = scann.nextLine();
@@ -413,6 +431,7 @@ public class Play
                     "taking away 50 stamina.");
             ch.setStamina(-50);
         }
+        System.out.println(ANSI_RESET);
     }
 
     /**
@@ -423,6 +442,7 @@ public class Play
      */
     public static void wood(Character ch)
     {
+        System.out.println(ANSI_YELLOW);
         Scanner s = new Scanner(System.in);
         System.out.println("You found wood! Would you like to chop it? (y/n)");
         String strw = s.nextLine();
@@ -440,6 +460,7 @@ public class Play
             System.out.println("You did not enter a valid command, young one.");
             wood(ch);
         }
+        System.out.println(ANSI_RESET);
     }
 
     /**
@@ -457,6 +478,7 @@ public class Play
     public static void exploreRiver(Character ch, River river,
                                     Quarry quarry, Town town, Home home, Woods woods)
     {
+        System.out.println(ANSI_CYAN);
         Scanner c = new Scanner(System.in);
         System.out.println("What would you like to do, " + ch.getName() + "?");
         System.out.println("w to wander, h for home, s for stats, x to exit.");
@@ -521,6 +543,7 @@ public class Play
             System.out.println("I'm sorry, " + ch.getName() + " I couldn't understand you");
             exploreRiver(ch, river, quarry, town, home, woods);
         }
+        System.out.println(ANSI_RESET);
     }
 
     /**
@@ -531,6 +554,7 @@ public class Play
      */
     public static void alligator(Character ch)
     {
+        System.out.println(ANSI_RED);
         System.out.println("An alligator has spotted you!");
         System.out.println("Would you like to go to land (l), swim away (s), or fight (f)?");
         Scanner scann = new Scanner(System.in);
@@ -586,6 +610,7 @@ public class Play
                     "taking away 50 stamina.");
             ch.setStamina(-50);
         }
+        System.out.println(ANSI_RESET);
     }
 
     /**
@@ -595,6 +620,7 @@ public class Play
      */
     public static void fish(Character ch)
     {
+        System.out.println(ANSI_YELLOW);
         Scanner s = new Scanner(System.in);
         System.out.println("You found a fish! Would you like to catch it? (y/n)");
         String strw = s.nextLine();
@@ -612,6 +638,7 @@ public class Play
             System.out.println("You did not enter a valid command, young one.");
             fish(ch);
         }
+        System.out.println(ANSI_RESET);
     }
 
     /**
@@ -629,6 +656,7 @@ public class Play
     public static void exploreQuarry(Character ch, River river,
                                      Quarry quarry, Town town, Home home, Woods woods)
     {
+        System.out.println(ANSI_WHITE);
         Scanner c = new Scanner(System.in);
         System.out.println("What would you like to do, " + ch.getName() + "?");
         System.out.println("w to wander, h for home, s for stats, x to exit.");
@@ -693,6 +721,7 @@ public class Play
             System.out.println("I'm sorry, " + ch.getName() + " I couldn't understand you");
             exploreQuarry(ch, river, quarry, town, home, woods);
         }
+        System.out.println(ANSI_RESET);
     }
 
     /**
@@ -704,6 +733,7 @@ public class Play
      */
     public static void fallingRocks(Character ch)
     {
+        System.out.println(ANSI_RED);
         System.out.println("You hear a distant rumble, meaning only one thing - rocks are falling.");
         System.out.println("Would you like to go to left (l), go right (r), or stay where you are (s)?");
         Scanner scann = new Scanner(System.in);
@@ -759,6 +789,7 @@ public class Play
                     "taking away 50 stamina.");
             ch.setStamina(-50);
         }
+        System.out.println(ANSI_RESET);
     }
 
     /**
@@ -768,6 +799,7 @@ public class Play
      */
     public static void rocks(Character ch)
     {
+        System.out.println(ANSI_YELLOW);
         Scanner s = new Scanner(System.in);
         System.out.println("You found minerals! Would you like to mine them? (y/n)");
         String strw = s.nextLine();
@@ -785,6 +817,7 @@ public class Play
             System.out.println("You did not enter a valid command, young one.");
             rocks(ch);
         }
+        System.out.println(ANSI_RESET);
     }
 
     /**
@@ -807,6 +840,7 @@ public class Play
     public static void exploreTown(Character ch, River river,   //TODO add an eat option in all of it and make an eat function
                                    Quarry quarry, Town town, Home home, Woods woods)
     {
+        System.out.println(ANSI_PURPLE);
 
         Scanner c = new Scanner(System.in);
         System.out.println("What would you like to do, " + ch.getName() + "?");
@@ -891,6 +925,7 @@ public class Play
             System.out.println("I'm sorry, " + ch.getName() + " I couldn't understand you");
             exploreTown(ch, river, quarry, town, home, woods);
         }
+        System.out.println(ANSI_RESET);
     }
 
     /**
@@ -911,6 +946,7 @@ public class Play
     public static void foundMerchant(Character ch, River river, Quarry quarry,
                                      Town town, Home home, Woods woods, Merchants merchant)
     {
+        System.out.println(ANSI_YELLOW);
         Scanner s = new Scanner(System.in);
         System.out.println("You found a merchant! Would you like to buy or sell? (y/n)");
         String str1 = s.nextLine();
@@ -1068,7 +1104,7 @@ public class Play
 
                 if (str3.equals("r") || str3.equals("R"))
                 {
-                    System.out.println("You choose to offer rocks. " + merchant.getName() + " will offer" +
+                    System.out.println("You choose to offer rocks. " + merchant.getName() + " will offer " +
                             "you one item for " + merchant.getGreedRock() + " rocks.");
                     int price = merchant.getGreedRock();
                     Scanner scan = new Scanner(System.in);
@@ -1212,6 +1248,7 @@ public class Play
             System.out.println("I'm sorry, I didn't understand your request.");
             foundMerchant(ch, river, quarry, town, home, woods, merchant);
         }
+        System.out.println(ANSI_RESET);
     }
 
     /**
@@ -1232,6 +1269,7 @@ public class Play
     public static void foundBadMerchant(Character ch, River river, Quarry quarry,
                                         Town town, Home home, Woods woods, Merchants merchant)
     {
+        System.out.println(ANSI_RED);
         System.out.println(merchant.getName() + " does not like the way you look, and tells you very" +
                 "carefully, ");
         System.out.print("  \"Listen closely, I am going to take what I want. There is nothing you" +
@@ -1299,6 +1337,7 @@ public class Play
                 takeGoods(ch, merchant);
             }
         }
+        System.out.println(ANSI_RESET);
     }
 
     /**
@@ -1344,6 +1383,7 @@ public class Play
     public static void foundPerson(Character ch, River river, Quarry quarry,
                                    Town town, Home home, Woods woods, NPC person)
     {
+        System.out.println(ANSI_YELLOW);
         System.out.println("You notice a person and greet them. Their tell you their name is " + person.getName());
         System.out.println("They softly say \"Hello " + ch.getName() + "\"");
         Scanner s = new Scanner(System.in);
@@ -1426,11 +1466,13 @@ public class Play
             System.out.println(ch.getName() + ", you did not enter a valid command.");
             foundPerson(ch, river, quarry, town, home, woods, person);
         }
+        System.out.println(ANSI_RESET);
     }
 
     public static void foundBadPerson(Character ch, River river, Quarry quarry,
                                    Town town, Home home, Woods woods, NPC person)
     {
+        System.out.println(ANSI_RED);
         System.out.println("You notice a person and greet them. Their tell you their name is " + person.getName());
         System.out.println("They grin mercilessly and whisper, \"" + ch.getName() + ", welcome to your worst nightmare.\"");
         Scanner s = new Scanner(System.in);
@@ -1438,7 +1480,7 @@ public class Play
         String st = s.nextLine();
         if (st.equals("f") || st.equals("F"))
         {
-
+            System.out.println("You decide you have nothing to lose and swing.");
         }
         else if (st.equals("r") || st.equals("R"))
         {
@@ -1457,10 +1499,12 @@ public class Play
         //Run - 66/33 they take damage, but when they take damage it's worse because they fall
         //Talk - 75/25 they take damage, but they take a lot of damage
         //TODO
+        System.out.println(ANSI_RESET);
     }
 
     public static void exit()
     {
+        System.out.println(ANSI_RESET + ANSI_RED + "Goodbye.");
         System.exit(0);
     }
 }

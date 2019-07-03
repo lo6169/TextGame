@@ -35,6 +35,7 @@ public class Character
     int rock;
     NPC person;
     boolean wooedPerson;
+    public static final String ANSI_BLUE = "\u001B[34m";
 
     /**
      * The constructor for the Character,
@@ -46,7 +47,7 @@ public class Character
     public void Character()
     {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter your name ");
+        System.out.println(ANSI_BLUE + "Enter your name ");
         this.name = sc.nextLine();
 
         fireSkill = (int)(Math.random() * 101);
@@ -301,11 +302,21 @@ public class Character
         return wooedPerson;
     }
 
+    /**
+     * Get the character's person /
+     * love interest
+     * @return
+     */
     public NPC getPerson()
     {
         return person;
     }
 
+    /**
+     * Set the character's person /
+     * love interest
+     * @param p
+     */
     public void setPerson(NPC p)
     {
         person = p;
