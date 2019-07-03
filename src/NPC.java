@@ -4,7 +4,7 @@ import java.util.Random;
  * Lindsey Olson
  * WMC @ RIT
  * 2019
- * Version 1.0 6.24.19
+ * Version 1.0 6.25.19
  */
 
 public class NPC
@@ -64,5 +64,46 @@ public class NPC
         Random rand = new Random();
         return beginning[rand.nextInt(beginning.length)] + middle[rand.nextInt(middle.length)] + " " +
                 beginning[rand.nextInt(beginning.length)] + lastEnd[rand.nextInt(lastEnd.length)];
+    }
+
+    /**
+     * A getter for
+     * the NPC's goodness
+     * level
+     * @return
+     */
+    public int getGoodness()
+    {
+        return goodness;
+    }
+
+    /**
+     * A setter for the NPC's
+     * goodness level
+     * @param i
+     */
+    public void setGoodness(int i)
+    {
+        goodness = i;
+    }
+
+    /**
+     * A getter for the
+     * character's name
+     * @return
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+    public int getCharisma()
+    {
+        return charisma;
+    }
+
+    public void setCharisma(int i)
+    {
+        charisma = i;
     }
 }

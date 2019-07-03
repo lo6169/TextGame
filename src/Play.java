@@ -5,7 +5,7 @@ import java.util.Scanner;
  * Lindsey Olson
  * WMC @ RIT
  * 2019
- * Version 1.0 6.24.19
+ * Version 1.0 7.2.19
  */
 
 public class Play
@@ -345,6 +345,11 @@ public class Play
             System.out.println("Goodbye");
             exit();
         }
+        else
+        {
+            System.out.println("I'm sorry, " + ch.getName() + " I couldn't understand you");
+            exploreWoods(ch, river, quarry, town, home, woods);
+        }
     }
 
     /**
@@ -510,6 +515,11 @@ public class Play
         {
             System.out.println("Goodbye");
             exit();
+        }
+        else
+        {
+            System.out.println("I'm sorry, " + ch.getName() + " I couldn't understand you");
+            exploreRiver(ch, river, quarry, town, home, woods);
         }
     }
 
@@ -678,6 +688,11 @@ public class Play
             System.out.println("Goodbye");
             exit();
         }
+        else
+        {
+            System.out.println("I'm sorry, " + ch.getName() + " I couldn't understand you");
+            exploreQuarry(ch, river, quarry, town, home, woods);
+        }
     }
 
     /**
@@ -789,7 +804,7 @@ public class Play
      * @param home
      * @param woods
      */
-    public static void exploreTown(Character ch, River river,
+    public static void exploreTown(Character ch, River river,   //TODO add an eat option in all of it and make an eat function
                                    Quarry quarry, Town town, Home home, Woods woods)
     {
 
@@ -811,7 +826,7 @@ public class Play
             int findPerson = (int)(Math.random() * 101);
             int findCarpenter = (int)(Math.random() * 101);
 
-            if (findSeller >= 75)
+            if (findSeller >= 65)
             {
                 Merchants merchant = new Merchants();
                 if (merchant.getGoodness() >= 4)
@@ -823,7 +838,35 @@ public class Play
                     foundBadMerchant(ch, river, quarry, town, home, woods, merchant);
                 }
             }
-            //else if
+            else
+            {
+                exploreTown(ch, river, quarry, town, home, woods);
+            }
+
+            if (findPerson >= 75) //TODO
+            {
+                NPC person = new NPC();
+                if (person.getGoodness() >= 5)
+                {
+                    foundPerson(ch, river, quarry, town, home, woods, person);
+                }
+                else
+                {
+                    foundBadPerson(ch, river, quarry, town, home, woods, person);
+                }
+            }
+            else
+            {
+                exploreTown(ch, river, quarry, town, home, woods);
+            }
+
+            if (ch.wooed())
+            {
+                if (findCarpenter >= 85)
+                {
+
+                }
+            }
             else
             {
                 exploreTown(ch, river, quarry, town, home, woods);
@@ -842,6 +885,11 @@ public class Play
         {
             System.out.println("Goodbye");
             exit();
+        }
+        else
+        {
+            System.out.println("I'm sorry, " + ch.getName() + " I couldn't understand you");
+            exploreTown(ch, river, quarry, town, home, woods);
         }
     }
 
@@ -1186,42 +1234,14 @@ public class Play
     {
         System.out.println(merchant.getName() + " does not like the way you look, and tells you very" +
                 "carefully, ");
-        System.out.println("  \" Listen closely, I am going to take what I want. There is nothing you" +
-                "can do about it. \" ");
+        System.out.print("  \"Listen closely, I am going to take what I want. There is nothing you" +
+                "can do about it.\" ");
         Scanner s = new Scanner(System.in);
         System.out.println("Do you choose to give " + merchant.getName() + " your goods (g) or fight (f)?");
         String st = s.nextLine();
         if (st.equals("g") || st.equals("G"))
         {
-            int whatGood = (int)(Math.random() * 5);
-            if (whatGood == 1)
-            {
-                int takeWood = (int) (Math.random() * ch.getWood());
-                ch.setWood(-takeWood);
-                System.out.println(merchant.getName() + " takes " + takeWood + " of your wood.");
-            }
-            else if (whatGood == 2)
-            {
-                int takeFish = (int) (Math.random() * ch.getFood());
-                ch.setWood(-takeFish);
-                System.out.println(merchant.getName() + " takes " + takeFish + " of your cooked fish.");
-            }
-            else if (whatGood == 3)
-            {
-                int takeFish = (int) (Math.random() * ch.getRawFood());
-                ch.setWood(-takeFish);
-                System.out.println(merchant.getName() + " takes " + takeFish + " of your raw fish.");
-            }
-            else if (whatGood == 4)
-            {
-                int takeRock = (int) (Math.random() * ch.getRock());
-                ch.setWood(-takeRock);
-                System.out.println(merchant.getName() + " takes " + takeRock + " of your rock.");
-            }
-            else
-            {
-                System.out.println("Upon further inspection, he decides to take it easy on you and lets you go.");
-            }
+            takeGoods(ch, merchant);
         }
         else if (st.equals("f") || st.equals("F"))
         {
@@ -1241,6 +1261,7 @@ public class Play
                 {
                     System.out.println(merchant.getName() + " runs after you and tackles you, resulting in you taking damage.");
                     ch.setStamina(-1 * (int)(Math.random() * 75));
+                    takeGoods(ch, merchant);
                 }
             }
             else if (str.equals("p") || str.equals("P"))
@@ -1254,6 +1275,7 @@ public class Play
                 {
                     System.out.println("You underestimated your abilities, leaving your face exposed.");
                     ch.setStamina(-1 * (int)(Math.random() * 101));
+                    takeGoods(ch, merchant);
                 }
             }
             else if (str.equals("k") || str.equals("K"))
@@ -1267,14 +1289,174 @@ public class Play
                 {
                     System.out.println("What made you think that would work? The merchant pushes you into the wall.");
                     ch.setStamina(-1 * (int)(Math.random() * 50));
+                    takeGoods(ch, merchant);
                 }
             }
             else
             {
-                System.out.println("You took too long to decide and the merchant hits you, taking away 50 stamina.");
+                System.out.println("You took too long to decide and the merchant hits you, taking away 50 stamina, along with some of your goods.");
                 ch.setStamina(-50);
+                takeGoods(ch, merchant);
             }
         }
+    }
+
+    /**
+     * This is the function that occurs
+     * when the merchant robs the
+     * character of some of their goods
+     * @param ch
+     * @param merchant
+     */
+    public static void takeGoods(Character ch, Merchants merchant)
+    {
+        int whatGood = (int)(Math.random() * 5);
+        if (whatGood == 1)
+        {
+            int takeWood = (int) (Math.random() * ch.getWood());
+            ch.setWood(-takeWood);
+            System.out.println(merchant.getName() + " takes " + takeWood + " of your wood.");
+        }
+        else if (whatGood == 2)
+        {
+            int takeFish = (int) (Math.random() * ch.getFood());
+            ch.setWood(-takeFish);
+            System.out.println(merchant.getName() + " takes " + takeFish + " of your cooked fish.");
+        }
+        else if (whatGood == 3)
+        {
+            int takeFish = (int) (Math.random() * ch.getRawFood());
+            ch.setWood(-takeFish);
+            System.out.println(merchant.getName() + " takes " + takeFish + " of your raw fish.");
+        }
+        else if (whatGood == 4)
+        {
+            int takeRock = (int) (Math.random() * ch.getRock());
+            ch.setWood(-takeRock);
+            System.out.println(merchant.getName() + " takes " + takeRock + " of your rock.");
+        }
+        else
+        {
+            System.out.println("Upon further inspection, he decides to take it easy on you and lets you go.");
+        }
+    }
+
+    public static void foundPerson(Character ch, River river, Quarry quarry,
+                                   Town town, Home home, Woods woods, NPC person)
+    {
+        System.out.println("You notice a person and greet them. Their tell you their name is " + person.getName());
+        System.out.println("They softly say \"Hello " + ch.getName() + "\"");
+        Scanner s = new Scanner(System.in);
+        System.out.println("What would you like to do? Talk(t), ignore(i), flirt(f)");
+        String st = s.nextLine();
+        if (st.equals("t") || st.equals("T"))
+        {
+            System.out.println("You decide simply to talk about anything.");
+            if (person.getCharisma() - ch.getCharisma() <= 70)
+            {
+                System.out.println("Your charisma increased because of the positive communication!");
+                ch.setCharisma((int)(Math.random()*11));
+
+                int cont = (int)(Math.random() * 101);
+                if (cont >= 75)
+                {
+                    Scanner sc = new Scanner(System.in);
+                    System.out.println("They would like to continue the conversation, would you? (y/n)");
+                    String ans = sc.nextLine();
+                    if (ans.equals("y") || ans.equals("Y"))
+                    {
+                        foundPerson(ch, river, quarry, town, home, woods, person);
+                    }
+                    else if (ans.equals("n") || ans.equals("N"))
+                    {
+                        System.out.println("You wish them farewell and off you go.");
+                    }
+                    else
+                    {
+                        System.out.println("I did not understand your command, so I will let you talk to them again.");
+                        foundPerson(ch, river, quarry, town, home, woods, person);
+                    }
+                }
+                else
+                {
+                    System.out.println("And they see you off, \"Have a great day\"");
+                }
+            }
+            else
+            {
+                System.out.println("They decide not to talk to you and wish you well.");
+            }
+        }
+        else if (st.equals("i") || st.equals("I"))
+        {
+            System.out.println("You simply ignore " + person.getName());
+            int ran = (int)(Math.random() * 101);
+            if (ran >= 50)
+            {
+                System.out.println("They recognize that you're ignoring them and get sad. You lose a little stamina. Happiness is contagious. Remember that.");
+            }
+            else
+            {
+                System.out.println("You successfully avoided interaction.");
+            }
+        }
+        else if (st.equals("f") || st.equals("F"))
+        {
+            System.out.println("You decide to take a courageous route and flirt with this very attractive person.");
+            if (person.getCharisma() - ch.getCharisma() > 50)
+            {
+                System.out.println(person.getName() + " takes offense that you flirt and slaps you.");
+                int damage = (int)(Math.random() * 76);
+                ch.setStamina(-damage);
+            }
+            else if (person.getCharisma() - ch.getCharisma() == 0)
+            {
+                System.out.println("You two fall in love instantly.");
+                ch.setWooed(true, person);
+                ch.setPerson(person);
+            }
+            else
+            {
+                System.out.println("They thank you for your time, but politely say no.");
+                //TODO - maybe make it so that if it's within x they can go on dates?
+            }
+        }
+        else
+        {
+            System.out.println(ch.getName() + ", you did not enter a valid command.");
+            foundPerson(ch, river, quarry, town, home, woods, person);
+        }
+    }
+
+    public static void foundBadPerson(Character ch, River river, Quarry quarry,
+                                   Town town, Home home, Woods woods, NPC person)
+    {
+        System.out.println("You notice a person and greet them. Their tell you their name is " + person.getName());
+        System.out.println("They grin mercilessly and whisper, \"" + ch.getName() + ", welcome to your worst nightmare.\"");
+        Scanner s = new Scanner(System.in);
+        System.out.println("What would you like to do? Fight(f), run(r), or try to talk(t)");
+        String st = s.nextLine();
+        if (st.equals("f") || st.equals("F"))
+        {
+
+        }
+        else if (st.equals("r") || st.equals("R"))
+        {
+
+        }
+        else if (st.equals("t") || st.equals("T"))
+        {
+
+        }
+        else
+        {
+            System.out.println(ch.getName() + ", you did not enter a valid command.");
+            foundBadPerson(ch, river, quarry, town, home, woods, person);
+        }
+        //Fight - 50/50 they take damage
+        //Run - 66/33 they take damage, but when they take damage it's worse because they fall
+        //Talk - 75/25 they take damage, but they take a lot of damage
+        //TODO
     }
 
     public static void exit()

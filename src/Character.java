@@ -4,7 +4,7 @@ import java.util.Scanner;
  * Lindsey Olson
  * WMC @ RIT
  * 2019
- * Version 1.0 6.21.19
+ * Version 1.0 7.2.19
  */
 
 public class Character
@@ -33,6 +33,7 @@ public class Character
     int food;
     int rawFood;
     int rock;
+    NPC person;
     boolean wooedPerson;
 
     /**
@@ -165,6 +166,16 @@ public class Character
     }
 
     /**
+     * This is the setter for
+     * the character's charisma
+     * @param i
+     */
+    public void setCharisma(int i)
+    {
+        charisma = charisma + i;
+    }
+
+    /**
      * This is a getter for the
      * amount of wood the user has
      * currently
@@ -274,7 +285,7 @@ public class Character
      * @param b - the truth value of
      *          whether or not a person was wooed
      */
-    public void setWooed(boolean b)
+    public void setWooed(boolean b, NPC npc)
     {
         wooedPerson = b;
     }
@@ -288,6 +299,16 @@ public class Character
     public boolean wooed()
     {
         return wooedPerson;
+    }
+
+    public NPC getPerson()
+    {
+        return person;
+    }
+
+    public void setPerson(NPC p)
+    {
+        person = p;
     }
 
 }
