@@ -134,10 +134,9 @@ public class Play
     {
         Scanner s = new Scanner(System.in);
         System.out.println(ANSI_BLUE + "What would you like to do, " + ch.getName() + "?");
-        System.out.println("Explore (e), sleep (b), stoke the fire (s), cook (c), or see inventory (i) (x to exit)" + ANSI_RESET);
+        System.out.println("Explore (e), sleep (b), stoke the fire (s), cook (c), eat (f), or see inventory (i) (x to exit)" + ANSI_RESET);
         String ans = s.nextLine();
 
-        //TODO add eat as an option (should make it option in the field?)
         if (ans.equals("e"))
         {
             System.out.println(ANSI_BLUE + "Where would you like to explore? ");
@@ -242,6 +241,10 @@ public class Play
                     }
                 }
             }
+            else if (ans.equals("f"))
+            {
+                eat(ch);
+            }
             else
             {
                 System.out.println(ANSI_BLUE + "You have no raw food, go gather some.");
@@ -267,6 +270,29 @@ public class Play
             homeChoices(ch, home, quarry, woods, river, town);
         }
         System.out.println(ANSI_RESET);
+    }
+
+    /**
+     * Allow the character to eat in order
+     * to replenish their stamina
+     * @param ch
+     */
+    public static void eat(Character ch)
+    {
+        while (ch.getFood() >= 1)
+        {
+            ch.setStamina(10);
+            ch.setFood(-1);
+            System.out.println(ANSI_BLUE + "That was delicious, and it gave you +10 stamina!");
+
+            Scanner scan = new Scanner(System.in);
+            String sc = scan.nextLine();
+            System.out.println("Would you like to eat again? (y/n)");
+            if (sc.equals("n") || sc.equals("N"))
+            {
+                break;
+            }
+        }
     }
 
     /**
@@ -837,7 +863,7 @@ public class Play
      * @param home
      * @param woods
      */
-    public static void exploreTown(Character ch, River river,   //TODO add an eat option in all of it and make an eat function
+    public static void exploreTown(Character ch, River river,
                                    Quarry quarry, Town town, Home home, Woods woods)
     {
         System.out.println(ANSI_PURPLE);
@@ -1434,10 +1460,11 @@ public class Play
             if (ran >= 50)
             {
                 System.out.println("They recognize that you're ignoring them and get sad. You lose a little stamina. Happiness is contagious. Remember that.");
+                ch.setStamina(-5);
             }
             else
             {
-                System.out.println("You successfully avoided interaction.");
+                System.out.println("You successfully avoided interaction. Congratulations, hermit.");
             }
         }
         else if (st.equals("f") || st.equals("F"))
@@ -1446,7 +1473,7 @@ public class Play
             if (person.getCharisma() - ch.getCharisma() > 50)
             {
                 System.out.println(person.getName() + " takes offense that you flirt and slaps you.");
-                int damage = (int)(Math.random() * 76);
+                int damage = (int)(Math.random() * 26);
                 ch.setStamina(-damage);
             }
             else if (person.getCharisma() - ch.getCharisma() == 0)
@@ -1457,8 +1484,23 @@ public class Play
             }
             else
             {
+                Scanner sc = new Scanner(System.in);
                 System.out.println("They thank you for your time, but politely say no.");
-                //TODO - maybe make it so that if it's within x they can go on dates?
+                System.out.println("Would you like to continue the conversation? (y/n)");
+                String scst = sc.nextLine();
+                if (scst.equals("y") || scst.equals("Y"))
+                {
+                    //todo
+                }
+                else if (scst.equals("n") || scst.equals("N"))
+                {
+                    System.out.println("You bid them farewell and leave.");
+                }
+                else
+                {
+                    System.out.println("You entered an invalid command, taking too long to say something, they walk away.");
+                }
+
             }
         }
         else
@@ -1469,6 +1511,19 @@ public class Play
         System.out.println(ANSI_RESET);
     }
 
+    /**
+     * This is the function that will play out over when
+     * the character encounters a "bad person", AKA a NPC
+     * with malicious intent, where the character must choose
+     * the best way to make it out with minimal damage.
+     * @param ch
+     * @param river
+     * @param quarry
+     * @param town
+     * @param home
+     * @param woods
+     * @param person
+     */
     public static void foundBadPerson(Character ch, River river, Quarry quarry,
                                    Town town, Home home, Woods woods, NPC person)
     {
@@ -1478,27 +1533,58 @@ public class Play
         Scanner s = new Scanner(System.in);
         System.out.println("What would you like to do? Fight(f), run(r), or try to talk(t)");
         String st = s.nextLine();
+        int success = (int)(Math.random() * 101);
         if (st.equals("f") || st.equals("F"))
         {
             System.out.println("You decide you have nothing to lose and swing.");
+            if (success >= 50)
+            {
+                System.out.println("You successfully punched them, making them run away crying.");
+                ch.setStamina(-5);
+            }
+            else
+            {
+                System.out.println("You realize the grievous mistake that you have made as they push you down without second thought.");
+                int damage = (int)(Math.random() * 40);
+                ch.setStamina(-damage);
+            }
         }
         else if (st.equals("r") || st.equals("R"))
         {
+            System.out.println("You decide to run. But will it work?");
+            if (success >= 33)
+            {
+                System.out.println("You run away, faster they they would be able to catch up.");
+                ch.setStamina(-7);
+            }
+            else
+            {
+                System.out.println("You trip and fall, leaving yourself helpless.");
+                int damage = (int)(Math.random() * 65);
+                ch.setStamina(-damage);
+            }
 
         }
         else if (st.equals("t") || st.equals("T"))
         {
-
+            System.out.println("You figure that you could sweet-talk your way out of a pummeling, but does it work?");
+            if (success >= 25)
+            {
+                System.out.println("You gently calm them down, soothing their anger away.");
+                ch.setStamina(-2);
+            }
+            else
+            {
+                System.out.println("Every word you say angers them more. By now, it is too late to fight back or run.");
+                int damage = (int)(Math.random() * 85);
+                ch.setStamina(-damage);
+            }
         }
         else
         {
             System.out.println(ch.getName() + ", you did not enter a valid command.");
             foundBadPerson(ch, river, quarry, town, home, woods, person);
         }
-        //Fight - 50/50 they take damage
-        //Run - 66/33 they take damage, but when they take damage it's worse because they fall
-        //Talk - 75/25 they take damage, but they take a lot of damage
-        //TODO
         System.out.println(ANSI_RESET);
     }
 
